@@ -6,31 +6,12 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState({});
-
-  // Animation on scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(prev => ({
-            ...prev,
-            [entry.target.id]: entry.isIntersecting
-          }));
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll('[id]').forEach((el) => {
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   const scrollToSection = (sectionId) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
     setIsMenuOpen(false);
   };
 
@@ -65,7 +46,6 @@ function App() {
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden mt-4 pb-4 space-y-4">
               <button onClick={() => scrollToSection('services')} className="block w-full text-left text-slate-700 hover:text-blue-600 transition-colors">Services</button>
@@ -81,7 +61,7 @@ function App() {
       <section id="hero" className="pt-20 pb-16 px-6">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-            <div className={`space-y-8 ${isVisible.hero ? 'animate-fadeInUp' : 'opacity-0'}`}>
+            <div className="space-y-8">
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-6xl font-bold text-slate-800 leading-tight">
                   L'informatique 
@@ -147,48 +127,109 @@ function App() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: <Monitor className="w-12 h-12 text-blue-600" />,
-                title: "Création de Sites Web",
-                description: "Sites sur mesure qui reflètent votre identité et vos objectifs",
-                features: ["Design responsive moderne", "Optimisation SEO incluse", "CMS facile à utiliser", "Hébergement et maintenance"]
-              },
-              {
-                icon: <Wrench className="w-12 h-12 text-blue-600" />,
-                title: "Maintenance Informatique",
-                description: "Installation et réparation de matériels informatiques complets",
-                features: ["Diagnostic complet", "Réparation sur site", "Installation matériel", "Formation utilisateur"]
-              },
-              {
-                icon: <Gamepad2 className="w-12 h-12 text-blue-600" />,
-                title: "Consoles & Gaming",
-                description: "Services spécialisés pour consoles de jeux et optimisation gaming",
-                features: ["Réparation consoles", "Configuration gaming", "Accessoires compatibles", "Optimisation performances"]
-              },
-              {
-                icon: <Smartphone className="w-12 h-12 text-blue-600" />,
-                title: "Téléphones & Mobile",
-                description: "Réparation et maintenance de smartphones et appareils mobiles",
-                features: ["Réparation écrans", "Changement batteries", "Récupération données", "Configuration appareils"]
-              }
-            ].map((service, index) => (
-              <div key={index} className="group bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-                <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-3">{service.title}</h3>
-                <p className="text-slate-600 mb-6">{service.description}</p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-slate-600">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+            <div className="group bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Monitor className="w-12 h-12 text-blue-600" />
               </div>
-            ))}
+              <h3 className="text-xl font-bold text-slate-800 mb-3">Création de Sites Web</h3>
+              <p className="text-slate-600 mb-6">Sites sur mesure qui reflètent votre identité et vos objectifs</p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Design responsive moderne
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Optimisation SEO incluse
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  CMS facile à utiliser
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Hébergement et maintenance
+                </li>
+              </ul>
+            </div>
+
+            <div className="group bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Wrench className="w-12 h-12 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-3">Maintenance Informatique</h3>
+              <p className="text-slate-600 mb-6">Installation et réparation de matériels informatiques complets</p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Diagnostic complet
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Réparation sur site
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Installation matériel
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Formation utilisateur
+                </li>
+              </ul>
+            </div>
+
+            <div className="group bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Gamepad2 className="w-12 h-12 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-3">Consoles & Gaming</h3>
+              <p className="text-slate-600 mb-6">Services spécialisés pour consoles de jeux et optimisation gaming</p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Réparation consoles
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Configuration gaming
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Accessoires compatibles
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Optimisation performances
+                </li>
+              </ul>
+            </div>
+
+            <div className="group bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Smartphone className="w-12 h-12 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-3">Téléphones & Mobile</h3>
+              <p className="text-slate-600 mb-6">Réparation et maintenance de smartphones et appareils mobiles</p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Réparation écrans
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Changement batteries
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Récupération données
+                </li>
+                <li className="flex items-center gap-2 text-sm text-slate-600">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  Configuration appareils
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -202,48 +243,53 @@ function App() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12">
-            {[
-              {
-                title: "Sakura Massage",
-                description: "Site vitrine pour un institut de massage. Design élégant et apaisant avec système de réservation en ligne.",
-                image: "https://images.unsplash.com/photo-1743865319071-929ac8a27bcd",
-                url: "sakuramassage.fr",
-                tags: ["Site Vitrine", "Responsive", "Réservation"]
-              },
-              {
-                title: "Hôtel Plaisance", 
-                description: "Webmastering complet pour un hôtel. Gestion du contenu, optimisation SEO et maintenance technique.",
-                image: "https://images.unsplash.com/photo-1612999105465-d970b00015a8",
-                url: "hotel-plaisance.com",
-                tags: ["Webmastering", "SEO", "Maintenance"]
-              }
-            ].map((project, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                <div className="relative h-64">
-                  <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-slate-800 mb-3">{project.title}</h3>
-                  <p className="text-slate-600 mb-6">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag, i) => (
-                      <span key={i} className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <a 
-                    href={`https://${project.url}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
-                  >
-                    Visiter le site <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+              <div className="relative h-64">
+                <img src="https://images.unsplash.com/photo-1743865319071-929ac8a27bcd" alt="Sakura Massage" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
               </div>
-            ))}
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-slate-800 mb-3">Sakura Massage</h3>
+                <p className="text-slate-600 mb-6">Site vitrine pour un institut de massage. Design élégant et apaisant avec système de réservation en ligne.</p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Site Vitrine</span>
+                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Responsive</span>
+                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Réservation</span>
+                </div>
+                <a 
+                  href="https://sakuramassage.fr" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+                >
+                  Visiter le site <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+              <div className="relative h-64">
+                <img src="https://images.unsplash.com/photo-1612999105465-d970b00015a8" alt="Hôtel Plaisance" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-slate-800 mb-3">Hôtel Plaisance</h3>
+                <p className="text-slate-600 mb-6">Webmastering complet pour un hôtel. Gestion du contenu, optimisation SEO et maintenance technique.</p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Webmastering</span>
+                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">SEO</span>
+                  <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Maintenance</span>
+                </div>
+                <a 
+                  href="https://hotel-plaisance.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+                >
+                  Visiter le site <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -257,68 +303,105 @@ function App() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Thierry Gray",
-                role: "Local Guide · 35 avis",
-                time: "il y a 3 mois",
-                rating: 5,
-                review: "Audric a ressuscité mon vieux PC à priori endommagé par un virus ! Excellent technicien, et en plus très sympathique et réactif. Je vous le recommande particulièrement.",
-                visit: "Visité en avril"
-              },
-              {
-                name: "Doryan HD",
-                role: "9 avis",
-                time: "il y a 2 ans", 
-                rating: 5,
-                review: "Personne très compétente et à l'écoute du projet. Enfin un professionnel qui n'est pas condescendant dans ce métier. Merci pour votre travail et votre compréhension 🙏 mon activité à vraiment été boosté",
-                visit: "Visité en mars 2023"
-              },
-              {
-                name: "Annick Feltz",
-                role: "6 avis",
-                time: "il y a 2 ans",
-                rating: 5,
-                review: "Audric m'a fait mon site sur mesure rapidement et continu le suivi pour de nouvelles modifications, très professionnel je recommande !",
-                visit: "Visité en décembre 2022"
-              },
-              {
-                name: "François Haym", 
-                role: "10 avis",
-                time: "il y a 2 ans",
-                rating: 5,
-                review: "Merci de t'être occupé de reprendre mon site en main ! N'hésitez pas à prendre contact!",
-                visit: "Visité en juillet 2022"
-              },
-              {
-                name: "Loris Ducrot",
-                role: "1 avis",
-                time: "il y a 2 ans",
-                rating: 5,
-                review: "Service excellent et professionnel. Très satisfait du travail réalisé.",
-                visit: "Visité en juin 2023"
-              }
-            ].slice(0, 6).map((review, index) => (
-              <div key={index} className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">{review.name.charAt(0)}</span>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-slate-800">{review.name}</h4>
-                    <p className="text-sm text-slate-600">{review.role}</p>
-                    <p className="text-sm text-slate-500">{review.time}</p>
-                  </div>
-                  <div className="flex gap-1">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">T</span>
                 </div>
-                <p className="text-slate-700 mb-3 leading-relaxed">{review.review}</p>
-                <p className="text-sm text-slate-500">{review.visit}</p>
+                <div className="flex-1">
+                  <h4 className="font-bold text-slate-800">Thierry Gray</h4>
+                  <p className="text-sm text-slate-600">Local Guide · 35 avis</p>
+                  <p className="text-sm text-slate-500">il y a 3 mois</p>
+                </div>
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
               </div>
-            ))}
+              <p className="text-slate-700 mb-3 leading-relaxed">Audric a ressuscité mon vieux PC à priori endommagé par un virus ! Excellent technicien, et en plus très sympathique et réactif. Je vous le recommande particulièrement.</p>
+              <p className="text-sm text-slate-500">Visité en avril</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">D</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-slate-800">Doryan HD</h4>
+                  <p className="text-sm text-slate-600">9 avis</p>
+                  <p className="text-sm text-slate-500">il y a 2 ans</p>
+                </div>
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-slate-700 mb-3 leading-relaxed">Personne très compétente et à l'écoute du projet. Enfin un professionnel qui n'est pas condescendant dans ce métier. Merci pour votre travail et votre compréhension 🙏 mon activité à vraiment été boosté</p>
+              <p className="text-sm text-slate-500">Visité en mars 2023</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">A</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-slate-800">Annick Feltz</h4>
+                  <p className="text-sm text-slate-600">6 avis</p>
+                  <p className="text-sm text-slate-500">il y a 2 ans</p>
+                </div>
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-slate-700 mb-3 leading-relaxed">Audric m'a fait mon site sur mesure rapidement et continu le suivi pour de nouvelles modifications, très professionnel je recommande !</p>
+              <p className="text-sm text-slate-500">Visité en décembre 2022</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">F</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-slate-800">François Haym</h4>
+                  <p className="text-sm text-slate-600">10 avis</p>
+                  <p className="text-sm text-slate-500">il y a 2 ans</p>
+                </div>
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-slate-700 mb-3 leading-relaxed">Merci de t'être occupé de reprendre mon site en main ! N'hésitez pas à prendre contact!</p>
+              <p className="text-sm text-slate-500">Visité en juillet 2022</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">L</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-slate-800">Loris Ducrot</h4>
+                  <p className="text-sm text-slate-600">1 avis</p>
+                  <p className="text-sm text-slate-500">il y a 2 ans</p>
+                </div>
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </div>
+              <p className="text-slate-700 mb-3 leading-relaxed">Service excellent et professionnel. Très satisfait du travail réalisé.</p>
+              <p className="text-sm text-slate-500">Visité en juin 2023</p>
+            </div>
           </div>
         </div>
       </section>
@@ -327,7 +410,6 @@ function App() {
       <section id="contact" className="py-20 bg-gradient-to-br from-slate-800 to-blue-900 text-white">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16">
-            {/* Contact */}
             <div>
               <h2 className="text-4xl font-bold mb-8">Contactez-moi</h2>
               <p className="text-xl text-slate-300 mb-8">
@@ -357,25 +439,38 @@ function App() {
               </div>
             </div>
 
-            {/* Horaires */}
             <div>
               <h3 className="text-2xl font-bold mb-8">Horaires d'ouverture</h3>
               <div className="bg-white/10 rounded-2xl p-8 backdrop-blur-sm">
                 <div className="space-y-4">
-                  {[
-                    { day: "Lundi", hours: "08:00 – 20:00" },
-                    { day: "Mardi", hours: "08:00 – 20:00" },
-                    { day: "Mercredi", hours: "08:00 – 20:00" },
-                    { day: "Jeudi", hours: "08:00 – 20:00" },
-                    { day: "Vendredi", hours: "08:00 – 20:00" },
-                    { day: "Samedi", hours: "08:00 – 18:00" },
-                    { day: "Dimanche", hours: "08:00 – 18:00" }
-                  ].map((schedule, index) => (
-                    <div key={index} className="flex justify-between items-center py-2 border-b border-white/20 last:border-b-0">
-                      <span className="font-medium">{schedule.day}</span>
-                      <span className="text-blue-300">{schedule.hours}</span>
-                    </div>
-                  ))}
+                  <div className="flex justify-between items-center py-2 border-b border-white/20">
+                    <span className="font-medium">Lundi</span>
+                    <span className="text-blue-300">08:00 – 20:00</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/20">
+                    <span className="font-medium">Mardi</span>
+                    <span className="text-blue-300">08:00 – 20:00</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/20">
+                    <span className="font-medium">Mercredi</span>
+                    <span className="text-blue-300">08:00 – 20:00</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/20">
+                    <span className="font-medium">Jeudi</span>
+                    <span className="text-blue-300">08:00 – 20:00</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/20">
+                    <span className="font-medium">Vendredi</span>
+                    <span className="text-blue-300">08:00 – 20:00</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/20">
+                    <span className="font-medium">Samedi</span>
+                    <span className="text-blue-300">08:00 – 18:00</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="font-medium">Dimanche</span>
+                    <span className="text-blue-300">08:00 – 18:00</span>
+                  </div>
                 </div>
                 <div className="mt-6 p-4 bg-green-500/20 rounded-lg">
                   <p className="text-green-300 font-semibold flex items-center gap-2">
