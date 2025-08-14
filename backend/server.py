@@ -120,7 +120,7 @@ api_router = APIRouter(prefix="/api")
 class ContactForm(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
-    phone: Optional[str] = Field(None, regex=r'^(?:\+33|0)[1-9](?:[0-9]{8})$')
+    phone: Optional[str] = Field(None, pattern=r'^(?:\+33|0)[1-9](?:[0-9]{8})$')
     service: str = Field(..., min_length=1, max_length=100)
     message: str = Field(..., min_length=10, max_length=2000)
     
